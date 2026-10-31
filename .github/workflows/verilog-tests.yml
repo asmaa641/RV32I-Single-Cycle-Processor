@@ -1,0 +1,33 @@
+
+name: RV32I Verilog CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  simulation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog
+
+      - name: Compile and run processor testbench
+        run: |
+          mkdir -p build
+          mapfile -t FILES < <(find rtl sim/testbenches -type f -name '*.v')
+
+          iverilog -g2012 -Wall -I rtl \
+            -s tb_processor \
+            -o build/tb_processor.vvp \
+            "${FILES[@]}"
+
+          vvp build/tb_processor.vvp
