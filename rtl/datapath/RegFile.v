@@ -1,13 +1,13 @@
 
 `include "defines.v"
 
-module RegFile #(parameter N = 32) (
+module RegFile (
     input clk,
     input rst,
     input [4:0] readreg1,
     input [4:0] readreg2,
     input [4:0] writereg,
-    input [N-1:0] writedata,
+    input [31:0] writedata,
     input regwrite,
     output [31:0] readdata1,
     output [31:0] readdata2
