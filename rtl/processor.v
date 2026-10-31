@@ -1,10 +1,13 @@
-module top(input clk, 
+`include "defines.v"
+
+module processor(input clk, 
 input rst); 
 
 // control wires
 wire branch;
 wire jal;
 wire jalr;
+wire lui;
 wire memRead;
 wire [2:0] ALUOp;
 wire memWrite;
