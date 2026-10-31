@@ -1,23 +1,21 @@
 
+`include "defines.v"
+
 module RegFile #(parameter N = 32) (
     input clk,
     input rst,
-
     input [4:0] readreg1,
     input [4:0] readreg2,
     input [4:0] writereg,
-
     input [N-1:0] writedata,
     input regwrite,
-
     output [31:0] readdata1,
     output [31:0] readdata2
 );
 
     wire [31:0] q [0:31];
-    reg  [31:0] load;
+    reg [31:0] load;
 
-    // Generate the load signal for the selected register
     always @(*) begin
         load = 32'd0;
 
@@ -25,11 +23,10 @@ module RegFile #(parameter N = 32) (
             load[writereg] = 1'b1;
     end
 
-    // Instantiate the 32 registers
     genvar j;
     generate
         for (j = 0; j < 32; j = j + 1) begin : register_array
-            Register #(.N(N)) register (
+            Register register_inst (
                 .D(writedata),
                 .L(load[j]),
                 .clk(clk),
@@ -39,7 +36,6 @@ module RegFile #(parameter N = 32) (
         end
     endgenerate
 
-    // Read from the two selected registers
     assign readdata1 = q[readreg1];
     assign readdata2 = q[readreg2];
 
