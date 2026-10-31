@@ -14,7 +14,7 @@ genvar j;
 generate 
 for(j = 0; j < 32; j =j +1)
 begin 
-register register(.D(writedata), .L(load[j]),.clk(clk),.rst(rst),.Q(q[j]));
+Register register(.D(writedata), .L(load[j]),.clk(clk),.rst(rst),.Q(q[j]));
 end 
 endgenerate
 
