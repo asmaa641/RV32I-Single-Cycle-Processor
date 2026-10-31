@@ -1,36 +1,33 @@
-`include "defines.v"
 
-module Register #(parameter N = 32) (
-    input [N-1:0] D,
+module Register (
+    input [31:0] D,
     input L,
     input clk,
     input rst,
-    output [N-1:0] Q
+    output [31:0] Q
 );
 
-wire [N-1:0] muxoutput;
+    wire [31:0] muxoutput;
 
-genvar j;
+    genvar j;
+    generate
+        for (j = 0; j < 32; j = j + 1) begin : genmodule
 
-generate
-    for (j = 0; j < N; j = j + 1) begin: genmodule
+            twoby1mux mux_inst (
+                .A(Q[j]),
+                .B(D[j]),
+                .S(L),
+                .C(muxoutput[j])
+            );
 
-        twoby1mux  m1(
-            .A(Q[j]),
-            .B(D[j]),
-            .S(L),
-            .C(muxoutput[j])
-        );
+            DFlipFlop dff_inst (
+                .clk(clk),
+                .rst(rst),
+                .D(muxoutput[j]),
+                .Q(Q[j])
+            );
 
-        DFlipFlop D1(
-            .clk(clk),
-            .rst(rst),
-            .D(muxoutput[j]),
-            .Q(Q[j])
-        );
-
-    end
-endgenerate
+        end
+    endgenerate
 
 endmodule
-
