@@ -1,3 +1,5 @@
+`include "defines.v"
+
 module ALUControl(input [2:0] ALUOp, input [2:0] funct3, input inst30, input lui, output reg [3:0] ALUSel);
 
 always@(*) begin
@@ -39,7 +41,7 @@ default:  ALUSel = `ALU_ADD;
 
 endcase
 
-if (lui == 1’b1)
+if (lui == 1'b1)
 ALUSel = `ALU_PASS;
 
 end

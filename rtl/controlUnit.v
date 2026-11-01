@@ -7,7 +7,7 @@ always @(*) begin
 branch = 1'b0;
 jal = 1'b0;
 jalr = 1'b0;
-lui = 1’b0;
+lui = 1'b0;
 memRead = 1'b0;
 memWrite = 1'b0;
 regWrite = 1'b0;
@@ -62,7 +62,7 @@ end
 `OPCODE_LUI: begin
 regWrite = 1'b1;
 ALUBSel = `ALU_B_IMM;
-lui = 1’b1;
+lui = 1'b1;
 end
 
 `OPCODE_AUIPC: begin

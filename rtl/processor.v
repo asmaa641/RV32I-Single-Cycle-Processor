@@ -1,3 +1,14 @@
+/*******************************************************************
+*
+* Module: rtype_tb
+* Project: RISCV Processor
+* Author: Asmaa Elshabshiri, Janna Alfiky 
+* Emails: asmaaelshabshiri@aucegypt.edu , jannabassem@aucegypt.edu
+* Description: RType testbench 
+*
+* Change history: 11/1/2026 = Started
+*
+**********************************************************************/
 `include "defines.v"
 
 module processor(input clk, 
@@ -44,7 +55,7 @@ wire [31:0] pc4OrtargetAddressOutput;
 wire [31:0] jalRTarget;
 
 // First step: PC Register
-register pcdut (.D(pcin), .L(~halt), .clk(clk), .rst(rst), .Q(pcout)); 
+Register pcdut (.D(pcin), .L(~halt), .clk(clk), .rst(rst), .Q(pcout)); 
 // when halt is zero -> load = 1, updates pc
 
 // PC to instruction memory
@@ -67,10 +78,10 @@ rv32_ImmGen immGen(.IR(instruction_mem_data_out), .Imm(generatedImm));
   twoby1mux ALUinput2mux(.A(readdata2), .B(generatedImm), .S(ALUBSel), .C(ALUinput2));
 
 // ALUControl
-ALUControlUnit alucontrol(.ALUOp(ALUOp), .funct3(instruction_mem_data_out[`IR_funct3]),.inst30(instruction_mem_data_out[30]), .lui(lui), .ALUSel(ALUSel));
+ALUControl alucontrol(.ALUOp(ALUOp), .funct3(instruction_mem_data_out[`IR_funct3]),.inst30(instruction_mem_data_out[30]), .lui(lui), .ALUSel(ALUSel));
 
 // ALU
-prv32_ALU ALU(.a(ALUinput1), .b(ALUinput2), .shamt(instruction_mem_data_out[`IR_shamt]), .r(ALUResult), .cf(cf), .zf(zf), .vf(vf), .sf(sf), .alufn(ALUSel));
+prv32_ALU ALU(.a(ALUinput1), .b(ALUinput2), .shamt(ALUinput2[4:0]), .r(ALUResult), .cf(cf), .zf(zf), .vf(vf), .sf(sf), .alufn(ALUSel));
 
 // ALU to DataMem
 DataMem DataMem(.clk(clk), .MemRead(memRead), .MemWrite(memWrite), .funct3(instruction_mem_data_out[`IR_funct3]),

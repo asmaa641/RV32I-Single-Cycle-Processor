@@ -14,16 +14,16 @@ case (funct3)
 `BR_BGE: taken = (sf == vf);
 `BR_BLTU: taken = ~cf;
 `BR_BGEU: taken = cf;
-default: taken = 1’b0;
+default: taken = 1'b0;
 
 endcase
 
 //next PC source: jalr has priority, then jal, then branch
-if (jalr == 1’b1)
+if (jalr == 1'b1)
 PCSel = `PC_JALR;
-else if (jal == 1’b1)
+else if (jal == 1'b1)
 PCSel = `PC_TARGET;
-else if ((branch == 1’b1) && (taken == 1’b1))
+else if ((branch == 1'b1) && (taken == 1'b1))
 PCSel = `PC_TARGET;
 else
 PCSel = `PC_PLUS4;
