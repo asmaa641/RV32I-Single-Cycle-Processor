@@ -1,4 +1,13 @@
-
+/*******************************************************************
+*
+* Module: regFile
+* Project: RISCV Processor
+* Author: Asmaa Elshabshiri
+* Emails: asmaaelshabshiri@aucegypt.edu
+* Description: The register file of the datapath
+* Change history: 10/29/2026 = edited for clarity
+*
+**********************************************************************/
 `include "defines.v"
 
 module RegFile (

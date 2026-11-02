@@ -1,6 +1,18 @@
+/*******************************************************************
+*
+* Module: ControlUnit
+* Project: RISCV Processor
+* Author: Janna Alfiky
+* Emails: jannabassem@aucegypt.edu
+* Description: control unit for all instructions
+*
+* Change history: 10/28/2026 = Started
+* 11/1/2026 finished
+*
+**********************************************************************/
 `include "defines.v"
 
-module controlUnit (input [4:0] opcode, input [2:0] funct3, input inst20, output reg branch, output reg jal, output reg jalr, output reg lui, output reg memRead, output reg memWrite, output reg regWrite, output reg ALUASel, output reg ALUBSel, output reg [1:0] WBSel, output reg  [2:0] ALUOp, output reg halt);
+module ControlUnit (input [4:0] opcode, input [2:0] funct3, input inst20, output reg branch, output reg jal, output reg jalr, output reg lui, output reg memRead, output reg memWrite, output reg regWrite, output reg ALUASel, output reg ALUBSel, output reg [1:0] WBSel, output reg  [2:0] ALUOp, output reg halt);
 
 always @(*) begin
 //defaults

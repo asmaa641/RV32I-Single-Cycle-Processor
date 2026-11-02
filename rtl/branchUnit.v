@@ -1,6 +1,18 @@
+/*******************************************************************
+*
+* Module: BranchUnit
+* Project: RISCV Processor
+* Author: Janna Alfiky
+* Emails: jannabassem@aucegypt.edu
+* Description: branch control unit for branch, jal, jalr, and flags
+*
+* Change history: 10/28/2026 = Started
+* 11/1/2026 finished
+*
+**********************************************************************/
 `include "defines.v"
 
-module branchUnit(input branch, jal, jalr, input [2:0] funct3, input cf, zf, vf, sf, output reg [1:0] PCSel);
+module BranchUnit(input branch, jal, jalr, input [2:0] funct3, input cf, zf, vf, sf, output reg [1:0] PCSel);
 
 reg taken;
 

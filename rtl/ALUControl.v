@@ -1,3 +1,15 @@
+/*******************************************************************
+*
+* Module: ALUControl
+* Project: RISCV Processor
+* Author: Janna Alfiky
+* Emails: jannabassem@aucegypt.edu
+* Description: ALU control unit for all instructions
+*
+* Change history: 10/28/2026 = Started
+* 11/1/2026 finished
+*
+**********************************************************************/
 `include "defines.v"
 
 module ALUControl(input [2:0] ALUOp, input [2:0] funct3, input inst30, input lui, output reg [3:0] ALUSel);

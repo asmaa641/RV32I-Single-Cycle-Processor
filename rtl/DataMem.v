@@ -1,24 +1,16 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 10/29/2026 02:43:11 PM
-// Design Name: 
-// Module Name: dataMem
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
+/*******************************************************************
+*
+* Module: DataMem
+* Project: RISCV Processor
+* Author: Asmaa Elshabshiri
+* Emails: asmaaelshabshiri@aucegypt.edu
+* Description: the data memory for load and store instructions
+*
+* Change history: 10/29/2026 = Started
+* 11/1/2026 finished
+*
+**********************************************************************/
 
 module DataMem(input clk, input MemRead, input MemWrite, input [2:0] funct3,
 input [31:0] addr, input [31:0] data_in, output reg [31:0] data_out);

@@ -1,17 +1,18 @@
 /*******************************************************************
 *
-* Module: rtype_tb
+* Module: Processor
 * Project: RISCV Processor
-* Author: Asmaa Elshabshiri, Janna Alfiky 
-* Emails: asmaaelshabshiri@aucegypt.edu , jannabassem@aucegypt.edu
-* Description: RType testbench 
+* Author: Asmaa Elshabshiri
+* Emails: asmaaelshabshiri@aucegypt.edu
+* Description: Top module that connects everything in the datapath and control units
 *
-* Change history: 11/1/2026 = Started
+* Change history: 10/29/2026 = Started
+* 11/1/2026 finished
 *
 **********************************************************************/
 `include "defines.v"
 
-module processor(input clk, 
+module Processor(input clk, 
 input rst); 
 
 // control wires
@@ -59,11 +60,11 @@ Register pcdut (.D(pcin), .L(~halt), .clk(clk), .rst(rst), .Q(pcout));
 // when halt is zero -> load = 1, updates pc
 
 // PC to instruction memory
-instMem im(.addr(pcout), .data_out(instruction_mem_data_out));
+InstMem im(.addr(pcout), .data_out(instruction_mem_data_out));
 
 
 // Instruction to Control Unit
-controlUnit control(.opcode(instruction_mem_data_out[`IR_opcode]), .funct3(instruction_mem_data_out[`IR_funct3]), .inst20(instruction_mem_data_out[20]), .branch(branch), .jal(jal), .jalr(jalr), .lui(lui), .memRead(memRead), .memWrite(memWrite), .regWrite(RegWrite), .ALUASel(ALUASel), .ALUBSel(ALUBSel), .WBSel(WBSel), .ALUOp(ALUOp), .halt(halt));
+ControlUnit control(.opcode(instruction_mem_data_out[`IR_opcode]), .funct3(instruction_mem_data_out[`IR_funct3]), .inst20(instruction_mem_data_out[20]), .branch(branch), .jal(jal), .jalr(jalr), .lui(lui), .memRead(memRead), .memWrite(memWrite), .regWrite(RegWrite), .ALUASel(ALUASel), .ALUBSel(ALUBSel), .WBSel(WBSel), .ALUOp(ALUOp), .halt(halt));
 
 // instruction to register
 RegFile register(.clk(clk), .rst(rst), .readreg1(instruction_mem_data_out[`IR_rs1]), .readreg2(instruction_mem_data_out[`IR_rs2]), .writereg(instruction_mem_data_out[`IR_rd]), .writedata(write_data), .regwrite(RegWrite), .readdata1(readdata1),.readdata2(readdata2));
@@ -73,9 +74,9 @@ rv32_ImmGen immGen(.IR(instruction_mem_data_out), .Imm(generatedImm));
 
 
 // ALUinput1
-  twoby1mux ALUinput1mux(.A(readdata1), .B(pcin), .S(ALUASel), .C(ALUinput1));
+  TwoBy1Mux ALUinput1mux(.A(readdata1), .B(pcout), .S(ALUASel), .C(ALUinput1));
 // ALUinput2
-  twoby1mux ALUinput2mux(.A(readdata2), .B(generatedImm), .S(ALUBSel), .C(ALUinput2));
+  TwoBy1Mux ALUinput2mux(.A(readdata2), .B(generatedImm), .S(ALUBSel), .C(ALUinput2));
 
 // ALUControl
 ALUControl alucontrol(.ALUOp(ALUOp), .funct3(instruction_mem_data_out[`IR_funct3]),.inst30(instruction_mem_data_out[30]), .lui(lui), .ALUSel(ALUSel));
@@ -90,20 +91,20 @@ DataMem DataMem(.clk(clk), .MemRead(memRead), .MemWrite(memWrite), .funct3(instr
 
 
 
-  twoby1mux dataMemOrALUMUX(.A(ALUResult), .B(dataMemOut), .S(WBSel[0]), .C(dataMemOrALUMUXOutput));
+  TwoBy1Mux dataMemOrALUMUX(.A(ALUResult), .B(dataMemOut), .S(WBSel[0]), .C(dataMemOrALUMUXOutput));
 
 assign pcplus4 = pcout +4;
-  twoby1mux PCorDMorALU(.A(dataMemOrALUMUXOutput), .B(pcplus4), .S(WBSel[1]), .C(write_data));
+  TwoBy1Mux PCorDMorALU(.A(dataMemOrALUMUXOutput), .B(pcplus4), .S(WBSel[1]), .C(write_data));
 
 assign targetAddress = pcout + generatedImm;
 
-  twoby1mux pc4OrtargetAddress(.A(pcplus4), .B(targetAddress), .S(PCSel[0]), .C(pc4OrtargetAddressOutput));
+  TwoBy1Mux pc4OrtargetAddress(.A(pcplus4), .B(targetAddress), .S(PCSel[0]), .C(pc4OrtargetAddressOutput));
 
   assign jalRTarget = {ALUResult[31:1], 1'b0};
 
-  twoby1mux pc4OrtargetAddressorJal(.A(pc4OrtargetAddressOutput), .B(jalRTarget), .S(PCSel[1]), .C(pcin));
+  TwoBy1Mux pc4OrtargetAddressorJal(.A(pc4OrtargetAddressOutput), .B(jalRTarget), .S(PCSel[1]), .C(pcin));
 
-branchUnit branchU(.branch(branch), .jal(jal), .jalr(jalr), .funct3(instruction_mem_data_out[`IR_funct3]), .cf(cf), .zf(zf), .vf(vf), .sf(sf), .PCSel(PCSel));
+BranchUnit branchU(.branch(branch), .jal(jal), .jalr(jalr), .funct3(instruction_mem_data_out[`IR_funct3]), .cf(cf), .zf(zf), .vf(vf), .sf(sf), .PCSel(PCSel));
 
 
 
